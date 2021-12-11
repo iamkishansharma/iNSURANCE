@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "671651867737",
+    "project_id": "rn-insurance",
+    "storage_bucket": "rn-insurance.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671651867737:android:b5a6ccc74f568e72781548",
+        "android_client_info": {
+          "package_name": "com.insurance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "671651867737-o288oane4ibfrjnatfpj5bhrsc4kd31c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.insurance",
+            "certificate_hash": "5f57e46b579468ca256706145c44d34d02541539"
+          }
+        },
+        {
+          "client_id": "671651867737-b0srrshksd6ge5menm7l9e4vqeogau3l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBa0UpegWpkUxhKvvPWTV5EqvWvheGHsE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671651867737-b0srrshksd6ge5menm7l9e4vqeogau3l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
