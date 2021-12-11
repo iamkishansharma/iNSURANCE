@@ -18,12 +18,14 @@ import BottomSheet from 'react-native-gesture-bottom-sheet';
 import {ShowSnackBar, options} from '../utils/Constants';
 import * as ImagePicker from 'react-native-image-picker';
 import {Picker} from '@react-native-picker/picker';
+import {LoadingScreen} from '../components/LoadingScreen';
+import {useIsFocused} from '@react-navigation/native';
+import {COUNTRY_LIST} from '../utils/Constants';
 // Firebase
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
-import {LoadingScreen} from '../components/LoadingScreen';
-import {useIsFocused} from '@react-navigation/native';
+
 const SignUp = ({navigation, route}) => {
   // Needed in order to use .show()
   const bottomSheet = useRef(null);
@@ -61,13 +63,17 @@ const SignUp = ({navigation, route}) => {
   const checkInput = () => {
     if (
       fullName == null ||
-      fullName.trim().length == 0 ||
       address == null ||
-      address.trim().length == 0 ||
       email == null ||
       password == null ||
+      pinCode == null ||
+      country == null ||
+      fullName.trim().length == 0 ||
+      address.trim().length == 0 ||
       email.trim().length == 0 ||
-      password.trim().length == 0
+      password.trim().length == 0 ||
+      pinCode.trim().length == 0 ||
+      country.trim().length == 0
     ) {
       // stop loading
       setIsLoading(false);
@@ -79,42 +85,30 @@ const SignUp = ({navigation, route}) => {
       // show loading
       setIsLoading(true);
       // call signin method after input check
-      signUp({email, password, address, profilePic, fullName});
+      signUp();
     }
   };
 
-  const signUp = async () => {
+  function signUp() {
     // create a new user
     setImageUploading(true);
     auth()
       .createUserWithEmailAndPassword(email.trim(), password.trim())
       .then(response => {
         console.log('Signup Success.... ' + response);
-        // save details of new user to firebase database
-        database()
-          .ref('/users/' + response.user.uid)
-          .set({
-            profilePic,
-            fullName,
-            email,
-            password,
-            address,
-          })
-          .then(res => {
-            // save image to firebase storage
-            uploadImage(profilePic);
-          });
+        // after sign upn upload image
+        uploadImage(response.user.uid, profilePic);
       })
       .catch(error => {
         ShowSnackBar('error', error.message);
         setImageUploading(false);
       });
-  };
+  }
 
-  const uploadImage = async picUri => {
+  function uploadImage(newUserId, picUri) {
     console.log('uploading....');
     const storageRefrence = storage().ref(
-      `/users/${auth().currentUser.uid}/profile.png`,
+      `/users/${auth().currentUser.uid}/profile.jpg`,
     );
 
     // upload task for firebase storage
@@ -132,18 +126,43 @@ const SignUp = ({navigation, route}) => {
         .getDownloadURL()
         .then(url => {
           setProfilePic(url);
-          setImageUploading(false);
-          // show user created and data uploaded
-          ToastAndroid.show('Sign in to your account', ToastAndroid.LONG);
-          // navigate to signin screen
-          navigation.navigate('SignIn');
+          console.log('Image url came...');
+          // after uploading and getting url
+          // save details to database
+          saveToDatabase(newUserId, url);
         })
         .catch(e => {
           ShowSnackBar('error', e.message);
           setImageUploading(false);
         });
     });
-  };
+  }
+
+  // save details of new user to firebase database
+  function saveToDatabase(newUserId, url) {
+    database()
+      .ref('/users/' + newUserId)
+      .set({
+        fullName: fullName.trim(),
+        email: email.trim(),
+        password: password.trim(),
+        address: address.trim(),
+        pinCode: pinCode.trim(),
+        profilePic: url,
+        country,
+      })
+      .then(() => {
+        setImageUploading(false);
+        // show user created and data uploaded
+        ToastAndroid.show('Sign in to your account', ToastAndroid.LONG);
+        // navigate to signin screen
+        navigation.navigate('SignIn');
+      })
+      .catch(e => {
+        ShowSnackBar('error', e.message);
+        setImageUploading(false);
+      });
+  }
 
   // get theme from rnp
   const paperTheme = useTheme();
@@ -374,12 +393,3 @@ const CountrySelector = ({
     </View>
   );
 };
-const COUNTRY_LIST = [
-  {name: 'Nepal', value: 'np'},
-  {name: 'India', value: 'in'},
-  {name: 'USA', value: 'us'},
-  {name: 'Bhutan', value: 'bh'},
-  {name: 'Mexico', value: 'mx'},
-  {name: 'China', value: 'ch'},
-  {name: 'Pakistan', value: 'pk'},
-];

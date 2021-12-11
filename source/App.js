@@ -64,15 +64,11 @@ const App = () => {
   // dialog for signOut
   const [visible, setVisible] = React.useState(false);
   const showDialog = () => setVisible(true);
-  const hideDialog = () => {
-    setVisible(false);
-    signOutUser();
-    BackHandler.exitApp();
-  };
+  const hideDialog = () => setVisible(false);
   const signOutUser = () => {
     auth().signOut();
   };
-  const user = auth().currentUser;
+
   return (
     <PaperProvider theme={theme}>
       <NavigationContainer theme={theme}>
@@ -80,7 +76,8 @@ const App = () => {
           backgroundColor={isDarkTheme ? theme.colors.background : 'white'}
           barStyle={isDarkTheme ? 'light-content' : 'dark-content'}
         />
-        <Stack.Navigator initialRouteName={user == null ? 'SignIn' : 'Home'}>
+        <Stack.Navigator
+          initialRouteName={auth().currentUser == null ? 'SignIn' : 'Home'}>
           <Stack.Screen
             name="SignIn"
             component={SignIn}
@@ -134,7 +131,13 @@ const App = () => {
                             <Paragraph>Are you sure?</Paragraph>
                           </Dialog.Content>
                           <Dialog.Actions>
-                            <Button onPress={hideDialog}>Done</Button>
+                            <Button
+                              onPress={() => {
+                                signOutUser();
+                                BackHandler.exitApp();
+                              }}>
+                              Done
+                            </Button>
                           </Dialog.Actions>
                         </Dialog>
                       </Portal>

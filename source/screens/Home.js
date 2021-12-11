@@ -66,7 +66,7 @@ const Home = ({navigation, route}) => {
 
               <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('StepOne')}
+                  onPress={() => navigation.navigate('StepOne', {company})}
                   style={{
                     elevation: 3,
                     padding: 10,
@@ -82,7 +82,6 @@ const Home = ({navigation, route}) => {
           <Image />
         )}
       </ScrollView>
-      
     </View>
   );
 };
