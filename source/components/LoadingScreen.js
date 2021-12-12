@@ -9,7 +9,8 @@ export const LoadingScreen = ({msg, isAutomatic, progress}) => {
     <View
       style={{
         backgroundColor: paperTheme.colors.backgroundColor,
-        width:'100%',height:'100%',
+        width: '100%',
+        height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,

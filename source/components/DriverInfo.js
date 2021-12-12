@@ -27,7 +27,7 @@ const DriverInfo = ({
   setState,
 }) => {
   return (
-    <>
+    <View style={{marginBottom: 15}}>
       <Text style={styles.heading}>Driver Info</Text>
       <Divider style={{backgroundColor: 'gray', height: 1}} />
       <TextInput
@@ -116,7 +116,7 @@ const DriverInfo = ({
           }}
         />
       </View>
-    </>
+    </View>
   );
 };
 export default DriverInfo;

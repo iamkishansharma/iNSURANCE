@@ -34,11 +34,12 @@ const Home = ({navigation, route}) => {
           data.push(documentSnapshot.data());
         });
         setCompanies(data);
+        setIsLoading(false);
       })
       .catch(e => {
         ShowSnackBar('error', e.message);
+        setIsLoading(false);
       });
-    setIsLoading(false);
   }
   useEffect(() => {
     // trigger on change
