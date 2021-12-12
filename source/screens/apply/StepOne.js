@@ -78,7 +78,7 @@ export default function StepOne({navigation, route}) {
       .then(querySnapshot =>
         querySnapshot.forEach(documentSnapshot => {
           console.log('User ID: ', documentSnapshot.id);
-          if (documentSnapshot.id.includes(user.uid)) {
+          if (documentSnapshot.id.includes(company.name)) {
             ShowSnackBar(
               'error',
               'You have already applied for this insurance.',
